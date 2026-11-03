@@ -1,0 +1,285 @@
+import { CreateRefundDto } from './dto/create-refund.dto.js';
+import { CreatePayment } from './dto/create-payment/create-payment.js';
+import { BillingService } from './billing.service.js';
+import { CreateInvoiceDto } from './dto/create-invoice.dto.js';
+import { Request } from 'express';
+interface AuthenticatedRequest extends Request {
+    user: {
+        userId: string;
+        email: string;
+    };
+}
+export declare class BillingController {
+    private readonly billingService;
+    constructor(billingService: BillingService);
+    createInvoice(clinicId: string, req: AuthenticatedRequest, dto: CreateInvoiceDto): Promise<{
+        items: {
+            id: string;
+            taxAmount: import("@prisma/client/runtime/library").Decimal;
+            totalAmount: import("@prisma/client/runtime/library").Decimal;
+            createdAt: Date;
+            updatedAt: Date;
+            clinicId: string;
+            description: string;
+            quantity: import("@prisma/client/runtime/library").Decimal;
+            unitPrice: import("@prisma/client/runtime/library").Decimal;
+            discount: import("@prisma/client/runtime/library").Decimal;
+            taxRate: import("@prisma/client/runtime/library").Decimal;
+            treatmentProcedureId: string | null;
+            invoiceId: string;
+        }[];
+    } & {
+        id: string;
+        invoiceNumber: string;
+        status: import("@prisma/client").$Enums.InvoiceStatus;
+        subtotal: import("@prisma/client/runtime/library").Decimal;
+        discountAmount: import("@prisma/client/runtime/library").Decimal;
+        taxAmount: import("@prisma/client/runtime/library").Decimal;
+        totalAmount: import("@prisma/client/runtime/library").Decimal;
+        paidAmount: import("@prisma/client/runtime/library").Decimal;
+        dueAmount: import("@prisma/client/runtime/library").Decimal;
+        issuedAt: Date | null;
+        dueDate: Date | null;
+        notes: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+        clinicId: string;
+        patientId: string;
+        treatmentPlanId: string | null;
+    }>;
+    issueInvoice(clinicId: string, invoiceId: string, req: AuthenticatedRequest): Promise<{
+        id: string;
+        invoiceNumber: string;
+        status: import("@prisma/client").$Enums.InvoiceStatus;
+        subtotal: import("@prisma/client/runtime/library").Decimal;
+        discountAmount: import("@prisma/client/runtime/library").Decimal;
+        taxAmount: import("@prisma/client/runtime/library").Decimal;
+        totalAmount: import("@prisma/client/runtime/library").Decimal;
+        paidAmount: import("@prisma/client/runtime/library").Decimal;
+        dueAmount: import("@prisma/client/runtime/library").Decimal;
+        issuedAt: Date | null;
+        dueDate: Date | null;
+        notes: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+        clinicId: string;
+        patientId: string;
+        treatmentPlanId: string | null;
+    }>;
+    recordPayment(clinicId: string, invoiceId: string, req: AuthenticatedRequest, dto: CreatePayment): Promise<{
+        payment: {
+            id: string;
+            status: import("@prisma/client").$Enums.PaymentStatus;
+            notes: string | null;
+            createdAt: Date;
+            updatedAt: Date;
+            clinicId: string;
+            invoiceId: string;
+            paymentNumber: string;
+            amount: import("@prisma/client/runtime/library").Decimal;
+            method: import("@prisma/client").$Enums.PaymentMethod;
+            transactionId: string | null;
+            reference: string | null;
+            receivedAt: Date;
+        };
+        invoice: {
+            id: string;
+            invoiceNumber: string;
+            status: import("@prisma/client").$Enums.InvoiceStatus;
+            subtotal: import("@prisma/client/runtime/library").Decimal;
+            discountAmount: import("@prisma/client/runtime/library").Decimal;
+            taxAmount: import("@prisma/client/runtime/library").Decimal;
+            totalAmount: import("@prisma/client/runtime/library").Decimal;
+            paidAmount: import("@prisma/client/runtime/library").Decimal;
+            dueAmount: import("@prisma/client/runtime/library").Decimal;
+            issuedAt: Date | null;
+            dueDate: Date | null;
+            notes: string | null;
+            createdAt: Date;
+            updatedAt: Date;
+            clinicId: string;
+            patientId: string;
+            treatmentPlanId: string | null;
+        };
+    }>;
+    getInvoices(clinicId: string): Promise<({
+        patient: {
+            id: string;
+            patientNumber: string;
+        };
+    } & {
+        id: string;
+        invoiceNumber: string;
+        status: import("@prisma/client").$Enums.InvoiceStatus;
+        subtotal: import("@prisma/client/runtime/library").Decimal;
+        discountAmount: import("@prisma/client/runtime/library").Decimal;
+        taxAmount: import("@prisma/client/runtime/library").Decimal;
+        totalAmount: import("@prisma/client/runtime/library").Decimal;
+        paidAmount: import("@prisma/client/runtime/library").Decimal;
+        dueAmount: import("@prisma/client/runtime/library").Decimal;
+        issuedAt: Date | null;
+        dueDate: Date | null;
+        notes: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+        clinicId: string;
+        patientId: string;
+        treatmentPlanId: string | null;
+    })[]>;
+    getInvoice(clinicId: string, invoiceId: string): Promise<{
+        patient: {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            clinicId: string;
+            branchId: string;
+            patientNumber: string;
+            firstName: string;
+            lastName: string;
+            dateOfBirth: Date | null;
+            gender: import("@prisma/client").$Enums.PatientGender;
+            phone: string | null;
+            email: string | null;
+            address: string | null;
+            city: string | null;
+            state: string | null;
+            pincode: string | null;
+        };
+        items: {
+            id: string;
+            taxAmount: import("@prisma/client/runtime/library").Decimal;
+            totalAmount: import("@prisma/client/runtime/library").Decimal;
+            createdAt: Date;
+            updatedAt: Date;
+            clinicId: string;
+            description: string;
+            quantity: import("@prisma/client/runtime/library").Decimal;
+            unitPrice: import("@prisma/client/runtime/library").Decimal;
+            discount: import("@prisma/client/runtime/library").Decimal;
+            taxRate: import("@prisma/client/runtime/library").Decimal;
+            treatmentProcedureId: string | null;
+            invoiceId: string;
+        }[];
+        payments: {
+            id: string;
+            status: import("@prisma/client").$Enums.PaymentStatus;
+            notes: string | null;
+            createdAt: Date;
+            updatedAt: Date;
+            clinicId: string;
+            invoiceId: string;
+            paymentNumber: string;
+            amount: import("@prisma/client/runtime/library").Decimal;
+            method: import("@prisma/client").$Enums.PaymentMethod;
+            transactionId: string | null;
+            reference: string | null;
+            receivedAt: Date;
+        }[];
+    } & {
+        id: string;
+        invoiceNumber: string;
+        status: import("@prisma/client").$Enums.InvoiceStatus;
+        subtotal: import("@prisma/client/runtime/library").Decimal;
+        discountAmount: import("@prisma/client/runtime/library").Decimal;
+        taxAmount: import("@prisma/client/runtime/library").Decimal;
+        totalAmount: import("@prisma/client/runtime/library").Decimal;
+        paidAmount: import("@prisma/client/runtime/library").Decimal;
+        dueAmount: import("@prisma/client/runtime/library").Decimal;
+        issuedAt: Date | null;
+        dueDate: Date | null;
+        notes: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+        clinicId: string;
+        patientId: string;
+        treatmentPlanId: string | null;
+    }>;
+    getPayments(clinicId: string, invoiceId: string): Promise<{
+        id: string;
+        status: import("@prisma/client").$Enums.PaymentStatus;
+        notes: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+        clinicId: string;
+        invoiceId: string;
+        paymentNumber: string;
+        amount: import("@prisma/client/runtime/library").Decimal;
+        method: import("@prisma/client").$Enums.PaymentMethod;
+        transactionId: string | null;
+        reference: string | null;
+        receivedAt: Date;
+    }[]>;
+    createRefund(clinicId: string, invoiceId: string, paymentId: string, dto: CreateRefundDto, req: AuthenticatedRequest): Promise<{
+        refund: {
+            id: string;
+            notes: string | null;
+            createdAt: Date;
+            clinicId: string;
+            amount: import("@prisma/client/runtime/library").Decimal;
+            reference: string | null;
+            refundNumber: string;
+            reason: string;
+            refundedAt: Date;
+            paymentId: string;
+        };
+        invoice: {
+            id: string;
+            invoiceNumber: string;
+            status: import("@prisma/client").$Enums.InvoiceStatus;
+            subtotal: import("@prisma/client/runtime/library").Decimal;
+            discountAmount: import("@prisma/client/runtime/library").Decimal;
+            taxAmount: import("@prisma/client/runtime/library").Decimal;
+            totalAmount: import("@prisma/client/runtime/library").Decimal;
+            paidAmount: import("@prisma/client/runtime/library").Decimal;
+            dueAmount: import("@prisma/client/runtime/library").Decimal;
+            issuedAt: Date | null;
+            dueDate: Date | null;
+            notes: string | null;
+            createdAt: Date;
+            updatedAt: Date;
+            clinicId: string;
+            patientId: string;
+            treatmentPlanId: string | null;
+        };
+    }>;
+    reconcilePaymentStatus(clinicId: string, invoiceId: string, paymentId: string, req: any): Promise<{
+        id: string;
+        status: import("@prisma/client").$Enums.PaymentStatus;
+        notes: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+        clinicId: string;
+        invoiceId: string;
+        paymentNumber: string;
+        amount: import("@prisma/client/runtime/library").Decimal;
+        method: import("@prisma/client").$Enums.PaymentMethod;
+        transactionId: string | null;
+        reference: string | null;
+        receivedAt: Date;
+    }>;
+    getInvoiceRefunds(clinicId: string, invoiceId: string): Promise<{
+        id: string;
+        notes: string | null;
+        createdAt: Date;
+        clinicId: string;
+        amount: import("@prisma/client/runtime/library").Decimal;
+        reference: string | null;
+        refundNumber: string;
+        reason: string;
+        refundedAt: Date;
+        paymentId: string;
+    }[]>;
+    getPaymentRefunds(clinicId: string, invoiceId: string, paymentId: string): Promise<{
+        id: string;
+        notes: string | null;
+        createdAt: Date;
+        clinicId: string;
+        amount: import("@prisma/client/runtime/library").Decimal;
+        reference: string | null;
+        refundNumber: string;
+        reason: string;
+        refundedAt: Date;
+        paymentId: string;
+    }[]>;
+}
+export {};

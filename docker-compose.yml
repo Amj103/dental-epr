@@ -1,0 +1,44 @@
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: dental_epr_db
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: dental_admin
+      POSTGRES_PASSWORD: dental_dev_password
+      POSTGRES_DB: dental_epr
+
+    ports:
+      - "5433:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dental_admin -d dental_epr"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: dental_epr_redis
+    restart: unless-stopped
+
+    ports:
+      - "6379:6379"
+
+    volumes:
+      - redis_data:/data
+
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  postgres_data:
+  redis_data:
